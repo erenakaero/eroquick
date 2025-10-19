@@ -20,39 +20,65 @@ if (!projectId) {
 // Zincirleri tanımla
 const chains = [mainnet, sepolia] as const;
 
-// Wagmi config'i component içinde oluştur (her render'da yeniden oluşturulmasını önlemek için)
-function createWagmiConfig() {
-  const { connectors } = getDefaultWallets({
-    appName: "ERO QuickProfile",
-    projectId: projectId,
-    chains,
-  });
+// Global config instance (singleton pattern)
+let wagmiConfig: any = null;
+let queryClient: QueryClient | null = null;
 
-  return createConfig({
-    chains,
-    connectors,
-    transports: {
-      [mainnet.id]: http(),
-      [sepolia.id]: http(),
-    },
-  });
+function getWagmiConfig() {
+  if (!wagmiConfig) {
+    const { connectors } = getDefaultWallets({
+      appName: "ERO QuickProfile",
+      projectId: projectId,
+      chains,
+    });
+
+    wagmiConfig = createConfig({
+      chains,
+      connectors,
+      transports: {
+        [mainnet.id]: http(),
+        [sepolia.id]: http(),
+      },
+    });
+  }
+  return wagmiConfig;
 }
 
-// React Query için client
-const queryClient = new QueryClient();
+function getQueryClient() {
+  if (!queryClient) {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 1000 * 60 * 5, // 5 minutes
+          retry: 1,
+        },
+      },
+    });
+  }
+  return queryClient;
+}
 
 // Provider bileşenimizi oluştur
 export function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
-  const [wagmiConfig] = React.useState(() => createWagmiConfig());
 
-  React.useEffect(() => setMounted(true), []);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Config'leri lazy load et
+  const config = React.useMemo(() => getWagmiConfig(), []);
+  const client = React.useMemo(() => getQueryClient(), []);
+
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
+    <WagmiConfig config={config}>
+      <QueryClientProvider client={client}>
         <RainbowKitProvider chains={chains}>
-          {mounted && children}
+          {children}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiConfig>
