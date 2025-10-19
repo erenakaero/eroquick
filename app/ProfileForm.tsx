@@ -163,8 +163,9 @@ export function ProfileForm({ ensName }: { ensName: string }) {
       {/* Input alanları */}
       {profileKeys.map((item) => (
         <div key={item.key} className="flex flex-col text-left">
-          <label htmlFor={item.key} className="mb-2 font-bold text-gray-700">
-            {item.label} (@{item.key})
+          <label htmlFor={item.key} className="mb-1.5 font-semibold text-gray-700">
+            {item.label}
+            <span className="font-mono text-xs text-gray-500 ml-2">(@{item.key})</span>
           </label>
           <input
             id={item.key}
@@ -172,7 +173,9 @@ export function ProfileForm({ ensName }: { ensName: string }) {
             value={formData[item.key] || ""}
             onChange={(e) => handleInputChange(item.key, e.target.value)}
             placeholder={item.key === "com.twitter" ? "Sadece kullanıcı adı (örn: vitalikbuterin)" : "..."}
-            className="p-3 rounded-lg border border-gray-300 text-gray-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="px-3 py-2 rounded-lg border border-gray-300 text-black 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500
+                       disabled:bg-gray-100 disabled:cursor-not-allowed"
             disabled={isProcessing} // İşlem sırasında formu kilitle
           />
         </div>
@@ -182,11 +185,10 @@ export function ProfileForm({ ensName }: { ensName: string }) {
       <button 
         type="submit" 
         disabled={isProcessing} // İşlem sırasında butonu kilitle
-        className={`mt-5 p-4 text-white border-none rounded-lg text-lg font-medium transition-colors ${
-          isProcessing 
-            ? 'bg-gray-400 cursor-not-allowed' 
-            : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-        }`}
+        className="w-full mt-4 px-4 py-3 bg-blue-600 text-white rounded-lg 
+                   font-semibold text-base cursor-pointer 
+                   hover:bg-blue-700 
+                   disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         {isSigning ? "İmza bekleniyor..." : 
          isConfirming ? "İşlem onaylanıyor..." : 
