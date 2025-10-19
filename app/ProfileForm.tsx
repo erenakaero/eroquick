@@ -139,6 +139,12 @@ export function ProfileForm({ ensName }: { ensName: string }) {
   return (
     <div className="w-full max-w-xl bg-white rounded-xl shadow-xl p-6 sm:p-10">
       <div className="text-center mb-8">
+        <button 
+          onClick={() => window.history.back()}
+          className="text-blue-600 hover:text-blue-800 mb-4 text-left"
+        >
+          ← Back
+        </button>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Edit Your Profile:
         </h2>

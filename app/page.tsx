@@ -31,12 +31,12 @@ export default function Home() {
     }
   }, [address, ensName, isEnsLoading, isEnsError]);
 
-  // ENS adı bulunduğunda otomatik olarak profil editörüne geç
-  React.useEffect(() => {
-    if (ensName && isConnected) {
-      setCurrentView('profile');
-    }
-  }, [ensName, isConnected]);
+  // ENS adı bulunduğunda otomatik olarak profil editörüne geç - KAPATILDI
+  // React.useEffect(() => {
+  //   if (ensName && isConnected) {
+  //     setCurrentView('profile');
+  //   }
+  // }, [ensName, isConnected]);
 
   // renderContent fonksiyonu
   const renderContent = () => {
@@ -73,7 +73,22 @@ export default function Home() {
       );
     }
 
-    return <ProfileForm ensName={ensName} />;
+    return (
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          Welcome, {ensName}!
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Your ENS profile is ready to be managed.
+        </p>
+        <button 
+          onClick={() => setCurrentView('profile')}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+        >
+          Edit Profile
+        </button>
+      </div>
+    );
   };
 
   // Landing Page görünümü
