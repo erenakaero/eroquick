@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useEnsName } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { ProfileForm } from "./ProfileForm";
 
 export default function Home() {
@@ -17,14 +17,14 @@ export default function Home() {
     isError: isEnsError,
   } = useEnsName({
     address: address,
-    chainId: mainnet.id,
+    chainId: sepolia.id,
   });
 
   // Debug için console log ekle
   React.useEffect(() => {
     if (address) {
       console.log("Connected wallet address:", address);
-      console.log("Current chain ID:", mainnet.id);
+      console.log("Current chain ID:", sepolia.id);
       console.log("ENS name result:", ensName);
       console.log("ENS loading:", isEnsLoading);
       console.log("ENS error:", isEnsError);
@@ -67,7 +67,7 @@ export default function Home() {
           </p>
           <p className="text-sm mt-2">
             To use this tool, please set a `.eth` name's "Primary Name" record 
-            to this address (on Mainnet) via the official ENS App (app.ens.domains).
+            to this address (on Sepolia) via the official ENS App (app.ens.domains).
           </p>
         </div>
       );

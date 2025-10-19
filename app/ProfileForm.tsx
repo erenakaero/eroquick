@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { mainnet } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 
 // Wagmi ve Viem'den GEREKLİ TÜM ARAÇLARI import edelim
 import { getEnsText, getEnsResolver, writeContract } from "@wagmi/core";
@@ -41,7 +41,7 @@ export function ProfileForm({ ensName }: { ensName: string }) {
       try {
         setIsLoading(true);
         const promises = profileKeys.map((item) =>
-          getEnsText(config, { name: ensName, key: item.key, chainId: mainnet.id })
+          getEnsText(config, { name: ensName, key: item.key, chainId: sepolia.id })
         );
         const results = await Promise.all(promises);
         const newFormData: Record<string, string> = {};
@@ -70,7 +70,7 @@ export function ProfileForm({ ensName }: { ensName: string }) {
       setTxHash(undefined);
 
       const node = namehash(ensName);
-      const resolverAddress = await getEnsResolver(config, { name: ensName, chainId: mainnet.id });
+      const resolverAddress = await getEnsResolver(config, { name: ensName, chainId: sepolia.id });
       if (!resolverAddress) throw new Error("Resolver not found");
       console.log(`Resolver address: ${resolverAddress}`);
 
@@ -88,7 +88,7 @@ export function ProfileForm({ ensName }: { ensName: string }) {
         abi: publicResolverAbi,
         functionName: "multicall",
         args: [calldata],
-        chainId: mainnet.id,
+        chainId: sepolia.id,
       });
 
       console.log(`Transaction sent: ${hash}`);
@@ -109,7 +109,7 @@ export function ProfileForm({ ensName }: { ensName: string }) {
     isSuccess: isConfirmed
   } = useWaitForTransactionReceipt({
     hash: txHash,
-    chainId: mainnet.id,
+    chainId: sepolia.id,
   });
 
   // --- 4. Form Submission ---
@@ -153,12 +153,12 @@ export function ProfileForm({ ensName }: { ensName: string }) {
           <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center">
             <strong>Success!</strong> Profile updated.
             <a 
-              href={`https://etherscan.io/tx/${txHash}`} 
+              href={`https://sepolia.etherscan.io/tx/${txHash}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className="block mt-2 text-green-600 hover:text-green-800 underline"
             >
-              View on Etherscan
+              View on Sepolia Etherscan
             </a>
           </div>
         )}
