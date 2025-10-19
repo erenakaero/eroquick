@@ -22,11 +22,11 @@ if (!projectId) {
 const chains = [mainnet, sepolia] as const;
 
 // 2. Cüzdan listesini ayarla
-const { connectors } = getDefaultWallets({
-  appName: "ENS QuickProfile",
-  projectId: projectId,
-  chains,
-});
+  const { connectors } = getDefaultWallets({
+    appName: "ERO QuickProfile",
+    projectId: projectId,
+    chains,
+  });
 
 // 3. Wagmi config'i oluştur
 const wagmiConfig = createConfig({

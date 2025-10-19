@@ -65,7 +65,7 @@ export default function Home() {
       
       {/* Header Alanı */}
       <header className="w-full max-w-5xl flex justify-between items-center">
-        <h1 className="text-2xl font-bold">ENS QuickProfile</h1>
+        <h1 className="text-2xl font-bold">ERO QuickProfile</h1>
         <ConnectButton />
       </header>
 
