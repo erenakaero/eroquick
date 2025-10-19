@@ -1,38 +1,53 @@
-# ENS Quick Profile
+Here is a very simple, clean, and direct README.md file in English.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ERO QuickProfile
+Decentralized Identity. Effortless Control.
 
-## Getting Started
+A simple dApp to manage your ENS profile. ERO QuickProfile lets you update all your ENS text records (avatar, bio, socials) in one single transaction using multicall.
 
-First, run the development server:
+Built for the ETHRome 2025 hackathon.
 
-```bash
+🚀 Live Demo
+Test the live application here: https://ero-quickprofile.vercel.app/
+
+✨ Features
+Clean UI: A simple, Web2-style form to edit complex Web3 records.
+
+Reverse Resolution: Automatically finds your Primary .eth name when you connect.
+
+Gas Efficient: Bundles all profile updates (bio, avatar, X, GitHub, etc.) into one multicall transaction to save you gas and time.
+
+💻 Tech Stack
+Framework: Next.js (App Router) & TypeScript
+
+Styling: Tailwind CSS
+
+Web3: Wagmi, Viem, & RainbowKit
+
+Infrastructure: Alchemy (RPC) & Vercel (Deployment)
+
+🛠️ How To Run Locally
+Clone the repo:
+
+Bash
+git clone https://github.com/erenakaero/eroquick.git
+cd eroquick
+Install dependencies:
+
+Bash
+npm install
+Set up environment variables:
+
+Create a file named .env.local
+
+Add your WalletConnect and Alchemy keys:
+
+Kod snippet'i
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=...
+NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY=...
+NEXT_PUBLIC_ALCHEMY_MAINNET_API_KEY=...
+Run the server:
+
+Bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open http://localhost:3000 in your browser.
