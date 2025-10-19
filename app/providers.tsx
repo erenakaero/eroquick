@@ -10,75 +10,53 @@ import { createConfig, WagmiConfig, http } from "wagmi";
 import { mainnet, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// .env.local dosyasından API anahtarımızı okuyalım
+// .env.local dosyasından API anahtarlarımızı okuyalım
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY;
 
 if (!projectId) {
   throw new Error("HATA: NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID .env.local dosyasında bulunamadı");
 }
 
+if (!alchemyApiKey) {
+  throw new Error("HATA: NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY .env.local dosyasında bulunamadı");
+}
+
 // Zincirleri tanımla
 const chains = [mainnet, sepolia] as const;
 
-// Global config instance (singleton pattern)
-let wagmiConfig: any = null;
-let queryClient: QueryClient | null = null;
+// Cüzdan listesini ayarla
+const { connectors } = getDefaultWallets({
+  appName: "ERO QuickProfile",
+  projectId: projectId,
+  chains,
+});
 
-function getWagmiConfig() {
-  if (!wagmiConfig) {
-    const { connectors } = getDefaultWallets({
-      appName: "ERO QuickProfile",
-      projectId: projectId,
-      chains,
-    });
+// Wagmi config'i oluştur
+const wagmiConfig = createConfig({
+  chains,
+  connectors,
+  transports: {
+    [mainnet.id]: http(`https://eth-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
+    [sepolia.id]: http(`https://eth-sepolia.g.alchemy.com/v2/${alchemyApiKey}`),
+  },
+  ssr: true,
+  multiInjectedProviderDiscovery: false,
+});
 
-    wagmiConfig = createConfig({
-      chains,
-      connectors,
-      transports: {
-        [mainnet.id]: http(),
-        [sepolia.id]: http(),
-      },
-    });
-  }
-  return wagmiConfig;
-}
+// React Query için client
+const queryClient = new QueryClient();
 
-function getQueryClient() {
-  if (!queryClient) {
-    queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          staleTime: 1000 * 60 * 5, // 5 minutes
-          retry: 1,
-        },
-      },
-    });
-  }
-  return queryClient;
-}
-
-// Provider bileşenimizi oluştur
+// 4. Provider bileşenimiz
 export function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Config'leri lazy load et
-  const config = React.useMemo(() => getWagmiConfig(), []);
-  const client = React.useMemo(() => getQueryClient(), []);
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
+  React.useEffect(() => setMounted(true), []);
 
   return (
-    <WagmiConfig config={config}>
-      <QueryClientProvider client={client}>
+    <WagmiConfig config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
         <RainbowKitProvider chains={chains}>
-          {children}
+          {mounted && children}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiConfig>
