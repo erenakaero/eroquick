@@ -137,7 +137,7 @@ export function ProfileForm({ ensName }: { ensName: string }) {
   const isProcessing = isSigning || isConfirming;
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-xl bg-white rounded-xl shadow-xl p-6 sm:p-10">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Edit Your Profile:
