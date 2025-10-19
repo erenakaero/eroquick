@@ -1,14 +1,13 @@
 // app/providers.tsx
-"use client"; // Bu satır çok önemli!
+"use client";
 
 import * as React from "react";
 import {
   RainbowKitProvider,
   getDefaultWallets,
-  connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
 import { createConfig, WagmiConfig, http } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains"; // Ana ağ ve test ağı
+import { mainnet, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // .env.local dosyasından API anahtarımızı okuyalım
@@ -18,33 +17,36 @@ if (!projectId) {
   throw new Error("HATA: NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID .env.local dosyasında bulunamadı");
 }
 
-// 1. Zincirleri ve provider'ı ayarla
+// Zincirleri tanımla
 const chains = [mainnet, sepolia] as const;
 
-// 2. Cüzdan listesini ayarla
+// Wagmi config'i component içinde oluştur (her render'da yeniden oluşturulmasını önlemek için)
+function createWagmiConfig() {
   const { connectors } = getDefaultWallets({
     appName: "ERO QuickProfile",
     projectId: projectId,
     chains,
   });
 
-// 3. Wagmi config'i oluştur
-const wagmiConfig = createConfig({
-  chains,
-  connectors,
-  transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-  },
-});
+  return createConfig({
+    chains,
+    connectors,
+    transports: {
+      [mainnet.id]: http(),
+      [sepolia.id]: http(),
+    },
+  });
+}
 
 // React Query için client
 const queryClient = new QueryClient();
 
-// 4. Provider bileşenimizi oluştur
+// Provider bileşenimizi oluştur
 export function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []); // Hydration hatalarını önlemek için
+  const [wagmiConfig] = React.useState(() => createWagmiConfig());
+
+  React.useEffect(() => setMounted(true), []);
 
   return (
     <WagmiConfig config={wagmiConfig}>
