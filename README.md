@@ -1,5 +1,3 @@
-Here is a very simple, clean, and direct README.md file in English.
-
 ERO QuickProfile
 Decentralized Identity. Effortless Control.
 
