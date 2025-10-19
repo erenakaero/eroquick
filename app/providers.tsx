@@ -37,6 +37,7 @@ const wagmiConfig = createConfig({
   },
   ssr: true,
   multiInjectedProviderDiscovery: false,
+  autoConnect: false, // Otomatik bağlantıyı kapat
 });
 
 // React Query için client
