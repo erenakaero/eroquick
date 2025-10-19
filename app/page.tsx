@@ -20,6 +20,17 @@ export default function Home() {
     chainId: mainnet.id,
   });
 
+  // Debug için console log ekle
+  React.useEffect(() => {
+    if (address) {
+      console.log("Connected wallet address:", address);
+      console.log("Current chain ID:", mainnet.id);
+      console.log("ENS name result:", ensName);
+      console.log("ENS loading:", isEnsLoading);
+      console.log("ENS error:", isEnsError);
+    }
+  }, [address, ensName, isEnsLoading, isEnsError]);
+
   // ENS adı bulunduğunda otomatik olarak profil editörüne geç
   React.useEffect(() => {
     if (ensName && isConnected) {
