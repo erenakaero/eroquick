@@ -11,15 +11,11 @@ import { mainnet, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // .env.local dosyasından API anahtarlarımızı okuyalım
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
-const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY;
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "Bf441d777066dc9791e83ae9aad077d83";
+const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY || "YsM4uRzKoUIioa0IcLw_7";
 
 if (!projectId) {
   throw new Error("HATA: NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID .env.local dosyasında bulunamadı");
-}
-
-if (!alchemyApiKey) {
-  throw new Error("HATA: NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY .env.local dosyasında bulunamadı");
 }
 
 // Zincirleri tanımla
@@ -29,10 +25,9 @@ const chains = [mainnet, sepolia] as const;
 const { connectors } = getDefaultWallets({
   appName: "ERO QuickProfile",
   projectId: projectId,
-  chains,
 });
 
-// Wagmi config'i oluştur
+// Wagmi config'i oluştur - Alchemy RPC kullan
 const wagmiConfig = createConfig({
   chains,
   connectors,
@@ -55,7 +50,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider>
           {mounted && children}
         </RainbowKitProvider>
       </QueryClientProvider>
